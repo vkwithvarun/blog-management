@@ -1,0 +1,19 @@
+<div class="form-group mb-3">
+  <label for="title">Title</label>
+  <input required value="<%= article.title %>" type="text" name="title" id="title" class="form-control">
+</div>
+<div class="form-group mb-3">
+  <label for="description">Description</label>
+  <textarea name="description" id="description" class="form-control"><%= article.description %></textarea>
+</div>
+<div class="form-group mb-3">
+  <label for="tags">Tags <small class="text-muted">(comma separated)</small></label>
+  <input value="<%= article.tags ? article.tags.join(', ') : '' %>" type="text" name="tags" id="tags" class="form-control" placeholder="javascript, nodejs, mongodb">
+</div>
+<div class="form-group mb-3">
+  <label for="markdown">Markdown</label>
+  <textarea required name="markdown" id="markdown" class="form-control" rows="12"><%= article.markdown %></textarea>
+</div>
+<br>
+<a href="/" class="btn btn-secondary">Cancel</a>
+<button type="submit" class="btn btn-primary">Save</button>

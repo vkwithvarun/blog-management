@@ -1,0 +1,39 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+}
+
+.navbar-brand {
+  letter-spacing: 0.5px;
+}
+
+.article-content img {
+  max-width: 100%;
+}
+
+.article-content pre {
+  background: #272822;
+  color: #f8f8f2;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.article-content code {
+  background: #eef0f2;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+}
+
+.article-content pre code {
+  background: transparent;
+  padding: 0;
+}
