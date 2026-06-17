@@ -1,70 +1,136 @@
 # DevBlog 📝
 
-A full-stack Markdown blogging platform built with Node.js, Express, MongoDB, and EJS. Users can sign up, write Markdown posts that render as sanitized HTML, tag and search articles, and only edit or delete the posts they authored.
+🚀 **Live Demo:** https://devblog-713s.onrender.com
+
+A full-stack blogging platform built with **Node.js**, **Express**, **MongoDB**, and **EJS**. Users can create accounts, write articles in Markdown, search posts, organize content with tags, and manage only their own articles through secure authentication and authorization.
+
+---
 
 ## Features
 
-- **Authentication** — sign up / log in / log out with hashed passwords (bcrypt) and persistent sessions stored in MongoDB
-- **Ownership permissions** — only the author of a post can edit or delete it
-- **Markdown rendering** — posts are written in Markdown and converted to sanitized HTML (`marked` + `DOMPurify`) to prevent XSS
-- **Tags** — add comma-separated tags to a post, shown as badges
-- **Search** — filter the homepage by title
-- **Pagination** — six posts per page
-- **Flash messages** — success/error feedback after actions
-- **Responsive UI** — Bootstrap 5
+* 🔐 User Authentication (Sign Up, Login, Logout)
+* 🔑 Password hashing using bcrypt
+* ✍️ Create, Read, Update, and Delete (CRUD) blog posts
+* 📝 Markdown support with HTML rendering
+* 🛡️ XSS protection using DOMPurify
+* 🏷️ Tag-based article organization
+* 🔍 Search articles by title
+* 📄 Pagination (6 posts per page)
+* 👤 Author-based permissions
+* 📢 Flash messages for user feedback
+* 📱 Responsive UI with Bootstrap 5
+* 💾 MongoDB Atlas cloud database integration
+
+---
 
 ## Tech Stack
 
 Node.js, Express, MongoDB (Mongoose), EJS, Bootstrap 5, bcryptjs, express-session + connect-mongo, connect-flash, marked, DOMPurify, slugify, method-override.
 
+---
+
 ## Project Structure
 
-```
+```text
 .
-├── server.js              # app entry point
-├── config/database.js     # MongoDB connection
-├── middleware/auth.js      # requireLogin guard
+├── server.js
+├── config/
+│   └── database.js
+├── middleware/
+│   └── auth.js
 ├── models/
-│   ├── article.js          # Article schema (slug, sanitizedHTML, tags, author)
-│   └── user.js              # User schema (hashed password)
+│   ├── article.js
+│   └── user.js
 ├── routes/
-│   ├── articles.js         # article CRUD
-│   └── auth.js              # signup/login/logout
+│   ├── articles.js
+│   └── auth.js
 ├── views/
-│   ├── partials/            # navbar, flash messages
-│   ├── articles/             # index, new, edit, show, form_field
-│   └── auth/                  # login, signup
-└── public/css/style.css
+│   ├── partials/
+│   ├── articles/
+│   └── auth/
+├── public/
+│   └── css/
+│       └── style.css
+└── package.json
 ```
 
-## Local Setup
+## Installation
 
-1. **Clone the repo**
-   ```bash
-   git clone https://github.com/<your-username>/Blog_WebSite.git
-   cd Blog_WebSite
-   npm install
-   ```
+### 1. Clone the Repository
 
-2. **Create a MongoDB Atlas database** (free tier) and copy the connection string.
+```bash
+git clone https://github.com/vkwithvarun/Blog_WebSite.git
+cd Blog_WebSite
+```
 
-3. **Create a `.env` file** in the project root (copy `.env.example`):
-   ```
-   MONGODB_URI=your_mongodb_atlas_connection_string
-   SESSION_SECRET=a_long_random_string
-   PORT=4401
-   ```
+### 2. Install Dependencies
 
-4. **Run the app**
-   ```bash
-   npm start
-   ```
-   Visit `http://localhost:4401`.
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+MONGODB_URI=your_mongodb_atlas_connection_string
+SESSION_SECRET=your_secure_random_secret
+PORT=4401
+```
+
+### 4. Start the Application
+
+```bash
+npm start
+```
+
+Open your browser and visit:
+
+```text
+http://localhost:4401
+```
+
+---
 
 ## Deployment
 
-This app is configured to deploy on **Render** (or any Node-friendly host) using the `MONGODB_URI`, `SESSION_SECRET`, and `PORT` environment variables set in the host's dashboard — no code changes needed.
+The application is deployed on Render and uses MongoDB Atlas as the database service.
+
+Required environment variables:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+SESSION_SECRET=your_secure_random_secret
+PORT=10000
+```
+
+Live Application:
+
+https://devblog-713s.onrender.com
+
+---
+
+## Future Enhancements
+
+* User profile pages
+* Rich text editor
+* Image upload support
+* Article categories
+* Comment system
+* Like and bookmark functionality
+* Admin dashboard
+
+---
 
 ## License
 
-MIT
+This project is licensed under the MIT License.
+
+---
+
+## Author
+
+**Varun Kumar**
+
+GitHub: https://github.com/vkwithvarun
