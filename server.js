@@ -1,4 +1,5 @@
 require('dotenv').config()
+
 const path = require('path')
 const express = require('express')
 const session = require('express-session')
@@ -12,9 +13,11 @@ const articleRouter = require('./routes/articles')
 const authRouter = require('./routes/auth')
 
 const app = express()
-connectDB()
+
+console.log('MONGODB_URI:', process.env.MONGODB_URI ? 'FOUND' : 'MISSING')
 
 app.set('view engine', 'ejs')
+
 app.use(express.urlencoded({ extended: false }))
 app.use(methodOverride('_method'))
 app.use(express.static(path.join(__dirname, 'public')))
@@ -23,9 +26,14 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'change-this-secret',
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
-  cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 } // 1 week
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI
+  }),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }
 }))
+
 app.use(flash())
 
 app.use((req, res, next) => {
@@ -39,20 +47,36 @@ app.use((req, res, next) => {
 
 const PAGE_SIZE = 6
 
-app.get('/', async (req, res) => {
-  const page = Math.max(parseInt(req.query.page) || 1, 1)
-  const q = (req.query.q || '').trim()
-  const filter = q ? { title: { $regex: q, $options: 'i' } } : {}
+app.get('/', async (req, res, next) => {
+  try {
+    const page = Math.max(parseInt(req.query.page) || 1, 1)
+    const q = (req.query.q || '').trim()
 
-  const totalArticles = await Article.countDocuments(filter)
-  const totalPages = Math.max(Math.ceil(totalArticles / PAGE_SIZE), 1)
+    const filter = q
+      ? { title: { $regex: q, $options: 'i' } }
+      : {}
 
-  const articles = await Article.find(filter)
-    .sort({ createdAt: 'desc' })
-    .skip((page - 1) * PAGE_SIZE)
-    .limit(PAGE_SIZE)
+    const totalArticles = await Article.countDocuments(filter)
 
-  res.render('articles/index', { articles, page, totalPages, q })
+    const totalPages = Math.max(
+      Math.ceil(totalArticles / PAGE_SIZE),
+      1
+    )
+
+    const articles = await Article.find(filter)
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * PAGE_SIZE)
+      .limit(PAGE_SIZE)
+
+    res.render('articles/index', {
+      articles,
+      page,
+      totalPages,
+      q
+    })
+  } catch (err) {
+    next(err)
+  }
 })
 
 app.use('/', authRouter)
@@ -63,9 +87,22 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  console.error(err)
+  console.error('Application Error:', err)
   res.status(500).send('Something went wrong on our end.')
 })
 
 const PORT = process.env.PORT || 4401
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+
+connectDB()
+  .then(() => {
+    console.log('✅ Database connected successfully')
+
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 Server running on port ${PORT}`)
+    })
+  })
+  .catch((err) => {
+    console.error('❌ Failed to connect to MongoDB')
+    console.error(err)
+    process.exit(1)
+  })
